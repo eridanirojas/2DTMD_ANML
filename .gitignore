@@ -3,3 +3,9 @@
 
 #data files
 *.txt
+
+#image files
+*.png
+
+#parameter files
+*.l6s
