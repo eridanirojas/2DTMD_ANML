@@ -10,6 +10,7 @@ dependencies:
   - python >=3.9
   - pandas
   - seaborn
+  - lmfit
   - pip:
       - joblib==1.3.2
       - scikit-learn==1.4.0
