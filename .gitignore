@@ -1,5 +1,9 @@
 #jupyter notebook
 .ipynb_checkpoints
+*.ipynb
+
+#.pyc
+*.ipyc
 
 #data files
 *.txt
