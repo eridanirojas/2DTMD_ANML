@@ -167,7 +167,7 @@ def peak_integrals(peaks, raman_shift, intensity):
     integrals = []
     additives = peaks['peak_widths']
     for left, right, additive in zip(left_ips, right_ips, additives):
-        mask = (raman_shift >= (left-(additive*3.75))) & (raman_shift <= (right+(additive*3.75)))
+        mask = (raman_shift >= (left-(additive))) & (raman_shift <= (right+(additive)))
         x_seg = raman_shift[mask]
         y_seg = intensity[mask]
         integral_simps = simpson(y=y_seg, x=x_seg)
