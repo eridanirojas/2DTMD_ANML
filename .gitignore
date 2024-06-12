@@ -3,7 +3,7 @@
 *.ipynb
 
 #.pyc
-*.ipyc
+__pycache__/
 
 #data files
 *.txt
