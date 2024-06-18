@@ -8,6 +8,7 @@ __pycache__/
 #data files
 *.txt
 *.csv
+*.xlsx
 
 #image files
 *.png
