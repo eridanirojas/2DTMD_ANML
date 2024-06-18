@@ -23,18 +23,18 @@ def index_to_xdata(xdata, indices):
     return f(indices)
 
 
-# In[7]:
+# In[1]:
 
 
-def ratiolabeler(labels, desired_ratio, peak_intensity_ratio, peak_integral_ratio):
+def ratiolabeler(labels, desired_ratio, peak_intensity_ratio = False, peak_integral_ratio = False):
     """
     Labels calculated ratio. 
 
     Inputs:
     - labels: Array containing user inputted strings. 
     - desired_ratio: Array containing user inputted integers ranging from 0-2.
-    - peak_intensity_ratio: Calculated value from intensity_ratio()
-    - peak_integral_ratio: Calculated value from integral_ratio()
+    - peak_intensity_ratio: Calculated value from intensity_ratio().
+    - peak_integral_ratio: Calculated value from integral_ratio().
 
     Returns:
     - ratio_label: Label of ratio found from labels and desired ratio.
@@ -52,7 +52,11 @@ def ratiolabeler(labels, desired_ratio, peak_intensity_ratio, peak_integral_rati
         else:
             pass
     ratio_label = f"{top}/{bottom}"
-    df = pd.DataFrame({"Intensity": peak_intensity_ratio,"Integral": peak_integral_ratio}, index = [f"{ratio_label}"])
+    if peak_intensity_ratio:
+        if peak_integral_ratio:
+            df = pd.DataFrame({"Intensity": peak_intensity_ratio,"Integral": peak_integral_ratio}, index = [f"{ratio_label}"])
+    else:
+        df = None
     return ratio_label, df
 
 
