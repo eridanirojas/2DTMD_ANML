@@ -207,8 +207,6 @@ def identify_peaks(raman_shift, intensity, height, spacing):
     right_ips = index_to_xdata(raman_shift, right_ips) 
     peak_intensity = intensity[peaks]
     peak_raman_shifts = raman_shift[peaks]
-    if len(peaks) == 0:
-        raise ValueError("Your input for peak_threshold was not able to locate any peaks. Please adjust either your spacing or your height.")
     plt.scatter(peak_raman_shifts, peak_intensity, color='blue', marker='o')
     plt.plot(raman_shift, intensity)
     plt.title("located peaks")
