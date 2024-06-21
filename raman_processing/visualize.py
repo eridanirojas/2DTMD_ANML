@@ -92,6 +92,7 @@ def heat_map(df, yx, raman_shift, height, spacing, deg, desired_ratio, ratio_lab
         y = df[i].values
         y = pro.normalize(raman_shift, y)
         y = pro.remove_baseline(raman_shift, y, deg)
+        raw_y = y 
         peaks_y = pks.identify_peaks(raman_shift, y, height, spacing)
         if lorentzian:
             y, l_r2 = fit.raman_lfitter(raman_shift, y, peaks_y)
@@ -105,7 +106,7 @@ def heat_map(df, yx, raman_shift, height, spacing, deg, desired_ratio, ratio_lab
         peaks_y = pks.identify_peaks(raman_shift, y, height, spacing)
         int_ratio = pks.intensity_ratio(desired_ratio, peaks_y)
         int_ratios.append(int_ratio)
-        spectra[(yx['x'][i], yx['y'][i])] = {'spectrum': y, 'r2_score': r2_scores[-1], 'int_ratio': int_ratios[-1]}
+        spectra[(yx['x'][i], yx['y'][i])] = {'raw': raw_y, 'spectrum': y, 'r2_score': r2_scores[-1], 'int_ratio': int_ratios[-1]}
     int_ratios_df = pd.DataFrame(int_ratios)
     r2_scores_df = pd.DataFrame(r2_scores)
     yxr2 = yx.join(r2_scores_df)
@@ -143,10 +144,13 @@ def lookup_spectrum(raman_shift, spectra, x, y):
     """
     data = spectra.get((x, y), None)
     if data is not None:
+        raw_spectrum = data['raw']
         spectrum = data['spectrum']
         r2 = data['r2_score']
         ratio_value = data['int_ratio']
-        plt.plot(raman_shift, spectrum)
+        plt.plot(raman_shift, raw_spectrum, label = "raw")
+        plt.plot(raman_shift, spectrum, label = "fitted")
+        plt.legend()
         plt.title(f'Fitted Spectrum at ({x},{y}) R2:{round(r2, 4)} Ratio:{round(ratio_value, 4)}')
     else:
         raise ValueError(f'No Spectrum at Coordinates ({x},{y})')
