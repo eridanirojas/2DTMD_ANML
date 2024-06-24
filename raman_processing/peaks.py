@@ -73,7 +73,7 @@ def intensity_ratio(desired_ratio, peaks):
              and raman shift locations for widths
 
     Returns:
-    - intensity_ratio: Intensity ratio between selected peaks.
+    - peak_intensity_ratio: Intensity ratio between selected peaks.
     """
     peak_intensity = peaks['peak_intensity']
     large = None
@@ -101,7 +101,7 @@ def integral_ratio(desired_ratio, integrals):
     - integrals: Array containing peaks' corresponding integral values.
 
     Returns:
-    - integral_ratio: Ratio between selected peak integrals.
+    - peak_integral_ratio: Ratio between selected peak integrals.
     """
     if len(desired_ratio) != len(integrals):
         raise ValueError(f"There are {len(integrals)} integrals and you put in {len(desired_ratio)} indices in desired_ratio")
