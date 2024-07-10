@@ -45,7 +45,7 @@ def plot_spectrum(raman_shift, intensity, peaks=None, labels=None, mtl_name=None
             plt.text(shift, value/3, f"W:{round(width, 3)}", ha='center', va='bottom', color='black')
             plt.plot([shift, shift], [0, value], color='black', linestyle='--', linewidth=1) 
             plt.text(shift, value/40, f"Sh:{round(shift, 3)}", ha='center', va='bottom', color='black')
-            plt.fill_between(raman_shift,intensity, 0, where=(raman_shift>=left_ip-(additive))&(raman_shift<=right_ip+(additive)),color = 'blue', alpha = 0.25)
+            plt.fill_between(raman_shift,intensity, 0, where=(raman_shift>=left_ip-(additive*2))&(raman_shift<=right_ip+(additive*2)),color = 'blue', alpha = 0.25)
         plt.hlines(width_heights, left_ips, right_ips, color='g')
     plt.ylim(0, max(intensity)+(max(intensity)/4))
     plt.xlim(min(raman_shift), max(raman_shift))    
@@ -56,7 +56,7 @@ def plot_spectrum(raman_shift, intensity, peaks=None, labels=None, mtl_name=None
     plt.show()
 
 
-# In[ ]:
+# In[1]:
 
 
 def heat_map(df, yx, raman_shift, height, spacing, deg, desired_ratio, ratio_label, voigt=False, lorentzian=False, gaussian=False):
@@ -92,7 +92,7 @@ def heat_map(df, yx, raman_shift, height, spacing, deg, desired_ratio, ratio_lab
         y = df[i].values
         y = pro.normalize(raman_shift, y)
         y = pro.remove_baseline(raman_shift, y, deg)
-        raw_y = y 
+        raw_y = y
         peaks_y = pks.identify_peaks(raman_shift, y, height, spacing)
         if lorentzian:
             y, l_r2 = fit.raman_lfitter(raman_shift, y, peaks_y)
@@ -129,7 +129,7 @@ def heat_map(df, yx, raman_shift, height, spacing, deg, desired_ratio, ratio_lab
     return avg_ratio, fig1, fig2, spectra
 
 
-# In[3]:
+# In[2]:
 
 
 def lookup_spectrum(raman_shift, spectra, x, y):
@@ -150,7 +150,6 @@ def lookup_spectrum(raman_shift, spectra, x, y):
         ratio_value = data['int_ratio']
         plt.plot(raman_shift, raw_spectrum, label = "raw")
         plt.plot(raman_shift, spectrum, label = "fitted")
-        plt.legend()
         plt.title(f'Fitted Spectrum at ({x},{y}) R2:{round(r2, 4)} Ratio:{round(ratio_value, 4)}')
     else:
         raise ValueError(f'No Spectrum at Coordinates ({x},{y})')
