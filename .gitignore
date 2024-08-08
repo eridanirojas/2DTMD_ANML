@@ -1,6 +1,5 @@
 #jupyter notebook
 .ipynb_checkpoints
-*.ipynb
 
 #.pyc
 __pycache__/
