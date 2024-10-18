@@ -65,6 +65,8 @@ def read_raman_data(file_path, col_num, csv=False, map=False):
         df = df.reset_index(drop=True)
         df = df.drop(df.columns[0], axis=1)
         df.columns = range(df.shape[1])
+
+    df = df.dropna().reset_index(drop=True)
     display(df)
     raman_shift = df.iloc[:, 0].values
     intensity = df.iloc[:, col_num].values
