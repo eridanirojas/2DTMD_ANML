@@ -198,7 +198,7 @@ def identify_peaks(raman_shift, intensity, height, spacing):
              and raman shift locations for widths
     """
     peaks, _ = find_peaks(intensity, height=height, distance=spacing) 
-    widths, width_heights, left_ips, right_ips = peak_widths(intensity, peaks)
+    widths, width_heights, left_ips, right_ips = peak_widths(intensity, peaks, )
     fwhm = []
     for i in widths:
         i = i/2
