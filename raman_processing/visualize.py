@@ -45,7 +45,7 @@ def plot_spectrum(raman_shift, intensity, peaks=None, labels=None, mtl_name=None
             plt.text(shift, value/3, f"W:{round(width, 3)}", ha='center', va='bottom', color='black')
             plt.plot([shift, shift], [0, value], color='black', linestyle='--', linewidth=1) 
             plt.text(shift, value/40, f"Sh:{round(shift, 3)}", ha='center', va='bottom', color='black')
-            plt.fill_between(raman_shift,intensity, 0, where=(raman_shift>=left_ip-(additive*2))&(raman_shift<=right_ip+(additive*2)),color = 'blue', alpha = 0.25)
+            plt.fill_between(raman_shift,intensity, 0, where=(raman_shift>=left_ip-(additive))&(raman_shift<=right_ip+(additive)),color = 'blue', alpha = 0.25)
         plt.hlines(width_heights, left_ips, right_ips, color='g')
     plt.ylim(0, max(intensity)+(max(intensity)/4))
     plt.xlim(min(raman_shift), max(raman_shift))    

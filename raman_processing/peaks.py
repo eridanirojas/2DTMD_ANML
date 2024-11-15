@@ -171,7 +171,7 @@ def peak_integrals(peaks, raman_shift, intensity):
     integrals = []
     additives = peaks['peak_widths']
     for left, right, additive in zip(left_ips, right_ips, additives):
-        mask = (raman_shift >= (left-(additive*2))) & (raman_shift <= (right+(additive*2)))
+        mask = (raman_shift >= (left-(additive*)) & (raman_shift <= (right+(additive)))
         x_seg = raman_shift[mask]
         y_seg = intensity[mask]
         integral_simps = simpson(y=y_seg, x=x_seg)
@@ -179,7 +179,7 @@ def peak_integrals(peaks, raman_shift, intensity):
     return integrals
 
 
-# In[6]:
+# In[1]:
 
 
 def identify_peaks(raman_shift, intensity, height, spacing):
@@ -195,16 +195,16 @@ def identify_peaks(raman_shift, intensity, height, spacing):
 
     Returns:
     - peaks: Dictionary containing peak indices, values, raman shift peak locations, width values per peak, width heights,
-             and raman shift locations for widths
+             and raman shift locations for widths. fixed?
     """
     peaks, _ = find_peaks(intensity, height=height, distance=spacing) 
-    widths, width_heights, left_ips, right_ips = peak_widths(intensity, peaks, )
+    widths, width_heights, left_ips, right_ips = peak_widths(intensity, peaks)
     fwhm = []
-    for i in widths:
-        i = i/2
-        fwhm.append(i)
     left_ips = index_to_xdata(raman_shift, left_ips) 
     right_ips = index_to_xdata(raman_shift, right_ips) 
+    for i,j in zip(left_ips, right_ips):
+        fixed_width = j - i
+        fwhm.append(fixed_width)
     peak_intensity = intensity[peaks]
     peak_raman_shifts = raman_shift[peaks]
     plt.scatter(peak_raman_shifts, peak_intensity, color='blue', marker='o')
