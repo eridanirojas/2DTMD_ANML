@@ -171,9 +171,25 @@ def peak_integrals(peaks, raman_shift, intensity):
     integrals = []
     additives = peaks['peak_widths']
     for left, right, additive in zip(left_ips, right_ips, additives):
-        mask = (raman_shift >= (left-(additive*)) & (raman_shift <= (right+(additive)))
+        lower_bound = left - additive
+        upper_bound = right + additive
+        
+        if lower_bound > upper_bound:
+            raise ValueError(f"Invalid range: lower_bound={lower_bound}, upper_bound={upper_bound}")
+        
+        mask = (raman_shift >= lower_bound) & (raman_shift <= upper_bound)
         x_seg = raman_shift[mask]
         y_seg = intensity[mask]
+    
+        if x_seg.size == 0 or y_seg.size == 0:
+            raise ValueError(
+                f"No data points found for the range: left={left}, right={right}, "
+                f"additive={additive}, computed range=({lower_bound}, {upper_bound})"
+            )
+    
+        if x_seg.shape != y_seg.shape:
+            raise ValueError(f"Shape mismatch: x_seg={x_seg.shape}, y_seg={y_seg.shape}")
+            
         integral_simps = simpson(y=y_seg, x=x_seg)
         integrals.append(integral_simps)
     return integrals
