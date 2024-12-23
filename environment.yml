@@ -18,3 +18,4 @@ dependencies:
       - scikit-learn==1.5.1
       - threadpoolctl==3.3.0
       - tensorflow==2.16.2
+      - -e .

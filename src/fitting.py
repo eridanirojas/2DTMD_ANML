@@ -192,4 +192,49 @@ def raman_vfitter(x, y, peaks):
     r2 = slms.r2_score(intensity, fit_intensity)
     print(f'R^2 score: {r2}')
     return fit_intensity, r2
+    
+def deconvolute(x, y, peaks, selection):
+    """
+    Deconvolutes selected peaks.
+
+    Inputs:
+    - x: Array containing x data.
+    - y: Array containing y data.
+    - peaks: Dictionary containing peak information, from peaks module.
+    - selection: Array selecting peaks to deconvolute.
+    
+    """
+    selection = [i - 1 for i in selection]
+    for i in selection:
+        if i < 0 or i >= len(peaks["peak_raman_shifts"]):
+            raise ValueError(f"Selection index {i + 1} is out of range.")
+        if not peaks["peak_raman_shifts"][i]:
+            raise ValueError(f"No valid peak at selection index {i + 1}.")
+    x = np.array(x)
+    y = np.array(y)
+    cen_guesses = [peaks["peak_raman_shifts"][i] for i in selection]
+    amp_guesses = [peaks["peak_intensity"][i] for i in selection]
+    fwhm_guesses = [peaks['peak_widths'][i] for i in selection]
+    x_min = x.min()
+    x_max = x.max()
+    mod = ConstantModel()
+    params = mod.make_params()
+    params['c'].set(value=y[0], min=0, max=y.max())
+    for i, (guess_x, guess_y, fwhm) in enumerate(zip(cen_guesses, amp_guesses, fwhm_guesses)):
+        gaussian = GaussianModel(prefix=f'g{i+1}_')
+        p = gaussian.make_params()
+        p[f'g{i+1}_center'].set(guess_x, min=x_min, max=x_max)
+        p[f'g{i+1}_amplitude'].set(guess_y)
+        p[f'g{i+1}_fwhm'].set(fwhm)
+        params.update(p)
+        mod += gaussian
+    display(params)
+    init = mod.eval(params, x=x)
+    out = mod.fit(y, params, x=x)
+    comps = out.eval_components(x=x)
+    plt.plot(x, y)
+    for i in selection:
+        plt.plot(x, comps[f'g{i+1}_'], '--', label=f'Gaussian component {i+1}')
+    plt.legend()
+    plt.show()
 
